@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Barlow", system-ui, sans-serif;
+  --font-display: "Barlow Condensed", "Barlow", sans-serif;
+  --color-bg: #12110e;
+  --color-surface: #1c1914;
+  --color-raised: #262219;
+  --color-fg: #f3efe4;
+  --color-muted: #a39888;
+  --color-line: #3c352b;
+  --color-amber: #e6a317;
+  --color-amber-ink: #1a1406;
+  --color-oxide: #d4653a;
+}
+
+@layer base {
+  html {
+    height: 100%;
+    background: var(--color-bg);
+  }
+  /* Mobile share chrome sets --grok-banner-h and covers the viewport top. */
+  @media (max-width: 1023px) {
+    html {
+      scroll-padding-top: calc(var(--grok-banner-h, 0px) + var(--share-clearance, 0px) + 4.5rem);
+    }
+  }
+  .mode-bar {
+    top: calc(var(--grok-banner-h, 0px) + var(--share-clearance, 0px));
+  }
+  .share-pad {
+    padding-top: var(--share-clearance, 0px);
+  }
+  body {
+    min-height: 100%;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  ::selection {
+    background: var(--color-amber);
+    color: var(--color-amber-ink);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

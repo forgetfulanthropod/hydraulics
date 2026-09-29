@@ -1,0 +1,38 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Ten Faults",
+      "hasCanvas": false,
+      "bodyTextLen": 2048,
+      "bodyTextHash": "619a5d34576a382512f96c51edf3cc0b15820422ca0f11fcc203256e23363da4",
+      "bodyTextPrefix": "TEN FAULTS Hydraulic troubleshooting as a branch chart. Pick the",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Ten Faults",
+      "hasCanvas": false,
+      "bodyTextLen": 1718,
+      "bodyTextHash": "d25b7f32de082d60da7389d853098e209e92fbed663936e9b04a1bc4c06448f0",
+      "bodyTextPrefix": "TEN FAULTS Hydraulic troubleshooting as a branch chart. Pick the",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": false,
+  "baselineReasons": []
+}

@@ -1,0 +1,61 @@
+1] Pressure Switch Does Not Activate at Set Pressure
+Context: Common in presses/molding machines where reaching specific pressure completes a cycle.
+Diagnostic Steps:
+Step A: Run cycle and monitor pressure gauge.
+If gauge shows correct pressure: Replace the pressure switch.
+If gauge shows lower pressure: Likely due to a directional valve leaking to the tank when shifting. (Note: Do not mistake this for a piston seal leak, which would cause cylinder drifting).
+[2] Cylinder Extends, Does Not Retract (System Pressure Present)
+Diagnostic Steps:
+Step A: Check solenoid coil power / fuse.
+Blown fuse: Indicates a shorted coil \rightarrow Replace fuse and coil.
+Step B: Manually shift the directional valve.
+Cylinder retracts: Indicates an open coil \rightarrow Replace solenoid.
+Cylinder still doesn't retract: Could be valve bypassing oil to tank, or (rarely) piston separated from the rod (rod stays still while piston moves).
+Resolution Path: Replace directional valve; if unresolved, replace the cylinder.
+[3] Cylinder Retracted, Fails to Extend (System Pressure Present)
+Diagnostic Steps:
+Step A: Check coil B power / fuse.
+Blown fuse: Shorted coil \rightarrow Replace fuse and coil.
+Step B: Manually shift directional valve.
+Cylinder extends: Open coil \rightarrow Replace solenoid.
+Doesn't extend: Valve is bypassing oil to tank \rightarrow Replace valve.
+Check counterbalance: Ensure counterbalance pressure gauge matches design value (if set too high, cylinder won't extend).
+[4] Cylinder Does Not Extend or Retract (System Pressure Present)
+Diagnostic Steps:
+Step A: Check incoming fuse on PLC output card (~99% of time it's an electrical issue).
+Fuse blows repeatedly: Replace the PLC output card.
+Step B: Check for mechanical/oil contamination.
+If fuse is fine: Contaminated oil may cause the valve spool to get stuck in the center position \rightarrow Replace the valve, oil, and filters.
+[5] Chronic Packing Gland Failure
+Diagnostic Steps:
+Step A: Check guide rods/Gibbs alignment.
+Worn/misaligned guide rods: Causes rod to extend/retract at an angle, stressing packing \rightarrow Align or replace guide rods.
+Step B: Check for overhung loads & flow control issues.
+Over-restricted rod-side flow control: Causes pressure spikes against counterbalance valve during shifts.
+Solution: Replace directional valve with a proportional valve and remove the restrictive flow control.
+[6] Cylinder Extends/Retracts Too Slowly (System Pressure Present)
+Diagnostic Steps:
+Step A: Check pressure and return filters.
+Clogged filters: Slows fluid movement. Check contamination indicators/switches and replace the dirty filter(s).
+[7] Overhung Load Drifts Down (System Pressure Present)
+Diagnostic Steps:
+Step A: Check rod-end for external leaks before the check valve.
+Step B: Check internal components.
+No external leaks: Major issue with worn cylinder piston seal bypassing oil to the blind end \rightarrow Replace the cylinder.
+[8] Cylinder Drifts Forward (Horizontal Load)
+Diagnostic Steps:
+Step A: Check center block directional valve.
+Internal leakage: Lets oil flow into both blind and rod ends, creating a force imbalance \rightarrow Replace directional valve.
+Step B: Check internal piston seals.
+If valve is fine: Oil leaking past piston seals from rod-side to cap-side \rightarrow Replace the cylinder.
+[9] No System Pressure (Motor is Running)
+Diagnostic Steps:
+Step A: Check the tank for foam (sign of air suction due to a clogged strainer or bad pump seal).
+Foam present: Clean or replace suction strainer. If unresolved, replace and realign the pump.
+Step B: Check relief valve.
+No foam present: Replace the relief valve and test pressure. If pressure still fails to reach set level, replace the pump.
+[10] Oil is Getting Too Hot
+Diagnostic Steps:
+Step A: Identify cooling loop type.
+Return Line Cooling System: Check for clogged heat exchanger (plate heat exchangers build up scale/water blockage; tube heat exchangers suffer mineral deposits). Check temperature-activated water valve.
+Kidney Loop Cooling System: Check if the kidney loop pump is running and providing proper flow, then follow standard return line cooling checks. YouTube video
