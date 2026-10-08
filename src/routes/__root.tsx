@@ -1,9 +1,10 @@
 import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
+import { Shell } from "@/components/shell";
 import appCss from "../styles.css?url";
 
-const APP_NAME = "Ten Faults";
+const APP_NAME = "Hydraulics";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -14,7 +15,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "Interactive hydraulic fault tree. Ten failure modes, selectable branches, from the symptom on the machine to the part you change.",
+          "A circuit you can tap. Maintenance on each part, ten common faults, a hundred modern uses, and a short history of hydraulics.",
       },
       { name: "theme-color", content: "#12110e" },
     ],
@@ -39,7 +40,9 @@ export const Route = createRootRoute({
       <body>
         <PreviewHostBridge />
         <AuthProvider>
-          <Outlet />
+          <Shell>
+            <Outlet />
+          </Shell>
         </AuthProvider>
         <Scripts />
       </body>

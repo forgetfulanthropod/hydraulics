@@ -1,5 +1,8 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { Brain } from "lucide-react";
+import { CARE } from "@/data/maintain";
 import { modes } from "@/data/modes";
+import { BrainModal } from "@/components/brain-modal";
 
 const W = 860;
 const H = 640;
@@ -255,27 +258,34 @@ const PRIMARY: Record<string, string> = {
 };
 
 export function CircuitMap({
-  modeId,
+  modeId = "",
   onOpenMode,
+  study = false,
 }: {
-  modeId: string;
+  modeId?: string;
   onOpenMode: (id: string) => void;
+  study?: boolean;
 }) {
   const [labels, setLabels] = useState(true);
-  const [selected, setSelected] = useState(PRIMARY[modeId] ?? "pswitch");
+  const [selected, setSelected] = useState(study ? "pump" : (PRIMARY[modeId] ?? "pswitch"));
+  const [brainId, setBrainId] = useState<string | null>(null);
 
   useEffect(() => {
+    if (study) return;
     setSelected(PRIMARY[modeId] ?? "pswitch");
-  }, [modeId]);
+  }, [modeId, study]);
 
-  const lit = new Set(PARTS.filter((part) => part.modes.includes(modeId)).map((part) => part.id));
+  const lit = study
+    ? new Set<string>()
+    : new Set(PARTS.filter((part) => part.modes.includes(modeId)).map((part) => part.id));
   const part = PARTS.find((item) => item.id === selected) ?? PARTS[0];
+  const care = CARE[part.id];
 
   return (
-    <section className="mt-5 border border-line bg-surface" aria-label="Circuit diagram">
+    <section className={study ? "border border-line bg-surface" : "mt-5 border border-line bg-surface"} aria-label="Circuit diagram">
       <div className="flex items-center justify-between gap-3 border-b border-line px-3 py-2">
         <p className="text-xs tracking-wide text-muted uppercase">
-          Circuit <span className="text-amber">· parts he circles</span>
+          Circuit <span className="text-amber">{study ? "· tap a part" : "· parts he circles"}</span>
         </p>
         <button
           type="button"
@@ -316,21 +326,76 @@ export function CircuitMap({
             PARTS.map((item) => (
               <span
                 key={`${item.id}-label`}
-                className={`pointer-events-none absolute text-[10px] leading-none font-medium whitespace-nowrap sm:text-[11px] ${
-                  lit.has(item.id) ? "text-amber" : "text-muted"
-                }`}
+                className="pointer-events-none absolute flex items-center gap-0.5"
                 style={{ left: `${(item.lx / W) * 100}%`, top: `${(item.ly / H) * 100}%` }}
               >
-                {item.label}
+                <span
+                  className={`text-[10px] leading-none font-medium whitespace-nowrap sm:text-[11px] ${
+                    item.id === selected || lit.has(item.id) ? "text-amber" : "text-muted"
+                  }`}
+                >
+                  {item.label}
+                </span>
+                <button
+                  type="button"
+                  aria-label={`Types and ratings for ${item.label}`}
+                  onClick={() => {
+                    setSelected(item.id);
+                    setBrainId(item.id);
+                  }}
+                  className="pointer-events-auto inline-flex size-6 items-center justify-center text-amber"
+                >
+                  <Brain className="size-3.5" aria-hidden />
+                </button>
               </span>
             ))}
         </div>
       </div>
 
+      {study && (
+        <div className="flex gap-2 overflow-x-auto border-t border-line px-3 py-3">
+          {PARTS.map((item) => {
+            const on = item.id === selected;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                aria-pressed={on}
+                onClick={() => setSelected(item.id)}
+                className={`min-h-11 shrink-0 border px-3 text-sm ${
+                  on ? "border-amber bg-amber text-amber-ink" : "border-line text-fg"
+                }`}
+              >
+                {item.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       <div className="border-t border-line px-3 py-3" aria-live="polite">
-        <p className="text-sm font-medium text-fg">{part.label}</p>
-        <p className="mt-1 text-sm leading-relaxed text-muted">{part.tip}</p>
-        <div className="mt-2 flex flex-wrap gap-2">
+        <div className="flex items-start justify-between gap-3">
+          <p className="text-sm font-medium text-fg">{part.label}</p>
+          <button
+            type="button"
+            onClick={() => setBrainId(part.id)}
+            className="inline-flex min-h-11 shrink-0 items-center gap-1.5 border border-line px-3 text-sm text-fg"
+          >
+            <Brain className="size-4 text-amber" aria-hidden />
+            Types
+          </button>
+        </div>
+        <p className="mt-1 text-sm leading-relaxed text-muted">{study && care ? care.job : part.tip}</p>
+        {study && care && (
+          <ul className="mt-3 flex flex-col gap-2">
+            {care.tasks.map((task) => (
+              <li key={task} className="border border-line bg-bg px-3 py-2 text-sm leading-relaxed text-fg">
+                {task}
+              </li>
+            ))}
+          </ul>
+        )}
+        <div className="mt-3 flex flex-wrap gap-2">
           {part.modes.map((id) => {
             const mode = modes.find((item) => item.id === id);
             if (!mode) return null;
@@ -340,16 +405,17 @@ export function CircuitMap({
                 key={id}
                 type="button"
                 onClick={() => onOpenMode(id)}
-                className={`min-h-9 border px-2.5 text-xs font-medium ${
+                className={`min-h-9 border px-2.5 text-left text-xs font-medium ${
                   current ? "border-amber bg-amber text-amber-ink" : "border-line text-fg hover:border-amber"
                 }`}
               >
-                {mode.n} {mode.short}
+                {study ? `Fault ${mode.n} · ${mode.short}` : `${mode.n} ${mode.short}`}
               </button>
             );
           })}
         </div>
       </div>
+      {brainId && <BrainModal partId={brainId} onClose={() => setBrainId(null)} />}
     </section>
   );
 }

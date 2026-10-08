@@ -53,48 +53,7 @@ function kickerClass(kind: Kind) {
   return "text-amber";
 }
 
-function useShareClearance() {
-  useEffect(() => {
-    const root = document.documentElement;
-    let raf = 0;
-    const apply = () => {
-      const banner = document.querySelector("[data-created-with-grok-banner]");
-      if (!banner) {
-        root.style.setProperty("--share-clearance", "0px");
-        return;
-      }
-      const styled = getComputedStyle(root).getPropertyValue("--grok-banner-h").trim();
-      const parsed = Number.parseFloat(styled);
-      if (Number.isFinite(parsed) && parsed > 8) {
-        root.style.setProperty("--share-clearance", "0px");
-        return;
-      }
-      const bottom = banner.getBoundingClientRect().bottom;
-      root.style.setProperty("--share-clearance", bottom > 8 ? `${Math.ceil(bottom + 8)}px` : "0px");
-    };
-    const schedule = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(apply);
-    };
-    schedule();
-    const obs = new MutationObserver(schedule);
-    obs.observe(document.body, { childList: true });
-    window.addEventListener("resize", schedule);
-    const later = window.setTimeout(schedule, 600);
-    const again = window.setTimeout(schedule, 1800);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.clearTimeout(later);
-      window.clearTimeout(again);
-      obs.disconnect();
-      window.removeEventListener("resize", schedule);
-      root.style.removeProperty("--share-clearance");
-    };
-  }, []);
-}
-
 export function FaultApp() {
-  useShareClearance();
   const [modeId, setModeId] = useState(modes[0].id);
   const [path, setPath] = useState<string[]>([modes[0].root]);
   const [walked, setWalked] = useState<string[]>([]);
@@ -107,20 +66,28 @@ export function FaultApp() {
 
   useEffect(() => {
     try {
+      const query = new URLSearchParams(window.location.search).get("m");
+      const queried = modes.find((item) => item.id === query);
       const raw = localStorage.getItem(STORAGE_KEY);
+      if (queried) {
+        setModeId(queried.id);
+        setPath([queried.root]);
+      }
       if (raw) {
         const saved = JSON.parse(raw) as {
           modeId?: string;
           path?: string[];
           walked?: string[];
         };
-        const nextMode = modes.find((item) => item.id === saved.modeId) ?? modes[0];
-        const nextPath =
-          Array.isArray(saved.path) && isValidPath(nextMode, saved.path)
-            ? saved.path
-            : [nextMode.root];
-        setModeId(nextMode.id);
-        setPath(nextPath);
+        if (!queried) {
+          const nextMode = modes.find((item) => item.id === saved.modeId) ?? modes[0];
+          const nextPath =
+            Array.isArray(saved.path) && isValidPath(nextMode, saved.path)
+              ? saved.path
+              : [nextMode.root];
+          setModeId(nextMode.id);
+          setPath(nextPath);
+        }
         if (Array.isArray(saved.walked)) {
           setWalked(saved.walked.filter((id) => modes.some((item) => item.id === id)));
         }
@@ -187,14 +154,13 @@ export function FaultApp() {
   }
 
   return (
-    <div className="share-pad min-h-dvh bg-bg text-fg">
-      <div className="h-1 bg-amber" />
-      <header className="px-4 pt-5 pb-4 lg:px-8">
+    <div>
+      <header className="px-4 pt-4 pb-4 lg:px-8">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="font-display text-4xl leading-none tracking-wide text-fg">TEN FAULTS</p>
+            <h1 className="font-display text-2xl tracking-wide text-fg">Ten common faults</h1>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">
-              Hydraulic troubleshooting as a branch chart. Pick the failure, or tap the part on the circuit.
+              Pick the symptom. Each branch ends at the part you change.
             </p>
           </div>
           <p className="shrink-0 font-display text-2xl leading-none text-amber">
@@ -207,7 +173,7 @@ export function FaultApp() {
       <div className="lg:flex lg:items-start">
         <nav
           aria-label="Failure modes"
-          className="mode-bar sticky z-20 border-y border-line bg-bg lg:max-h-dvh lg:w-72 lg:shrink-0 lg:overflow-y-auto lg:border-y-0 lg:border-r"
+          className="mode-bar-under sticky z-20 border-y border-line bg-bg lg:max-h-dvh lg:w-72 lg:shrink-0 lg:overflow-y-auto lg:border-y-0 lg:border-r"
         >
           <div className="flex gap-2 overflow-x-auto px-4 py-3 lg:flex-col lg:overflow-visible lg:px-3 lg:py-4">
           {modes.map((item) => {

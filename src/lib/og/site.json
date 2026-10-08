@@ -1,5 +1,6 @@
 {
-  "title": "Ten Faults",
+  "title": "Hydraulics",
   "card": "custom",
-  "description": "Interactive hydraulic troubleshooting flowchart."
+  "description": "Tap the circuit. Maintenance on each part, ten common faults, a hundred modern uses, and a short history.",
+  "banner": "/x-banner.jpg"
 }

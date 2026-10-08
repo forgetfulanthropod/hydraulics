@@ -19,17 +19,16 @@
     height: 100%;
     background: var(--color-bg);
   }
-  /* Mobile share chrome sets --grok-banner-h and covers the viewport top. */
   @media (max-width: 1023px) {
     html {
-      scroll-padding-top: calc(var(--grok-banner-h, 0px) + var(--share-clearance, 0px) + 4.5rem);
+      scroll-padding-top: 8.5rem;
     }
   }
   .mode-bar {
-    top: calc(var(--grok-banner-h, 0px) + var(--share-clearance, 0px));
+    top: 0;
   }
-  .share-pad {
-    padding-top: var(--share-clearance, 0px);
+  .mode-bar-under {
+    top: 4.25rem;
   }
   body {
     min-height: 100%;
